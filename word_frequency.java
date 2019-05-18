@@ -31,9 +31,33 @@ public class word_frequency{
             
     } 
 
-  
+    public static void ParseLine(String line){
+
+        line = line.replaceAll("[!-/]", " ");
+        line = line.replaceAll("[:-@]", " ");
+        
+        String[] wordArray = line.split(" ");
+        for(String word : wordArray)
+            addToList(word);
+    }
+
+
+    private static void addToList(String word){
+
+        if( !words.isThere( word.toLowerCase() ) ){
+            words.addLast(word.toLowerCase());
+            return;
+        }
+        words.addFreq(word.toLowerCase());
+    
+            
+        
+    }
 
     public static void main(String[] args){
+
+        fileParser("textFile.txt");        
+        System.out.println(words);
     }
 
 
