@@ -13,6 +13,25 @@ public class word_frequency{
         return file;
     }
 
+    private static void fileParser(String fileName){
+        Scanner reader = null;
+        try{
+
+            File newFile = getFile("./"+fileName);
+            reader = new Scanner(newFile);
+
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+            System.out.println("File NOT FOUND!!");
+            System.exit(0);
+        }
+        while(reader.hasNextLine()){
+            ParseLine(reader.nextLine());
+        }
+            
+    } 
+
+  
 
     public static void main(String[] args){
     }
