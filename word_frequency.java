@@ -37,8 +37,11 @@ public class word_frequency{
         line = line.replaceAll("[:-@]", " ");
         
         String[] wordArray = line.split(" ");
-        for(String word : wordArray)
+        for(String word : wordArray){
             addToList(word);
+            System.out.println(words);
+        }
+        
     }
 
 
@@ -48,10 +51,9 @@ public class word_frequency{
             words.addLast(word.toLowerCase());
             return;
         }
+
         words.addFreq(word.toLowerCase());
     
-            
-        
     }
 
     public static void main(String[] args){

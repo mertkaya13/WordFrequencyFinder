@@ -18,6 +18,10 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
       return element; 
     }
 
+    public int getFrequency() { 
+      return frequency; 
+    }
+
     public Node<E> getPrev() { return prev; }
 
     public Node<E> getNext() { return next; }
@@ -102,10 +106,10 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     return remove(header.getPrev());            // last element is before header
   }
 
-  private void addBetween(E e, Node<E> predecessor, Node<E> successor) {
+  private void addBetween(E e,int f, Node<E> predecessor, Node<E> successor) {
   
     // create and link a new node
-    Node<E> newest = new Node<E>(e,1, predecessor, successor);
+    Node<E> newest = new Node<E>(e,f, predecessor, successor);
     predecessor.setNext(newest);
     successor.setPrev(newest);
     size++;
@@ -133,21 +137,29 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
     Node<E> walk = null;
     StringBuilder sb = new StringBuilder("(");
+   
     if(!isEmpty()){
+    
       sb.append(header.getElement());
       sb.append(" ");
-      sb.append(header.frequency);
-      if(size != 1)
+      sb.append(header.getFrequency());
+	 
+	    if(size != 1)
         sb.append(", ");
+		
       walk = header.getNext(); // if empty would throw nullPointerException
+    
     }
   
     while (walk != header && walk != null ) {
+
       sb.append(walk.getElement());
       sb.append(" ");
-      sb.append(walk.frequency);
+      sb.append(walk.getFrequency());
+
       if(walk.getNext() != header)
         sb.append(", ");
+      
       walk = walk.getNext();
 
     }
@@ -157,17 +169,18 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
   private Node<E> getTargetNode(E target){
     
-    Node<E> walk = header.getNext();
+    Node<E> walk = header;
 
-    if(header.getElement().equals(target))
-      return header;
 
-    while(walk != header){
-      if(walk.getElement().equals(target)){
-        return walk;
-      }
-      walk = walk.getNext();
-    }
+	do {
+    
+    if(walk.getElement().equals(target)){
+			return walk;
+		}
+    
+    walk = walk.getNext();
+    
+	}while(walk != header);
     return null;
   }
 
@@ -203,23 +216,57 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     return false;
   }
 
+  //switches prevNodes and nextNodes position
   protected void switchPos(Node<E> prevNode , Node<E> nextNode){
+
+    Node<E> holdPrev = nextNode.getPrev();
+    Node<E> holdNext = nextNode.getNext();
+
     remove(nextNode);
+    addBetween(nextNode.getElement(),nextNode.getFrequency(),prevNode.getPrev(),prevNode);
+
+    if(header == prevNode)
+      header = nextNode;
+
+    remove(prevNode);
+    addBetween(prevNode.getElement(),prevNode.getFrequency(),holdPrev,holdNext);
     
-    //switches prevNodes and nextNodes position
-    addBetween(nextNode.element,nextNode.frequency,prevNode.getPrev(),prevNode); 
 
   }
 
   protected void addFreq(E element){
+
     Node<E> targetNode = getTargetNode(element);
     targetNode.frequency++;
+    System.out.println(targetNode.getElement()+" element ve freq"+targetNode.frequency);
     correctPos(targetNode);
+  
   }
 
   protected void correctPos(Node<E> node){
 
+    Node<E> walk = header;
+	  do {
+    
+      if(node.getFrequency() > walk.getFrequency()){
+        
+        switchPos(walk,node);
+        return;  
+      
+      }
 
+      if(node.getFrequency() == walk.getFrequency()){
+      
+        if(node.getElement().compareTo(walk.getElement()) < 0){
+          switchPos(walk,node);
+          return;  
+        }
+    
+      }
+
+      walk = walk.getNext();
+
+	  } while (walk != header);
 
   }
 
