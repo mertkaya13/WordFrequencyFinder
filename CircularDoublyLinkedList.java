@@ -216,21 +216,20 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     return false;
   }
 
-  //switches prevNodes and nextNodes position
-  protected void switchPos(Node<E> prevNode , Node<E> nextNode){
-
-    Node<E> holdPrev = nextNode.getPrev();
-    Node<E> holdNext = nextNode.getNext();
-
-    remove(nextNode);
-    addBetween(nextNode.getElement(),nextNode.getFrequency(),prevNode.getPrev(),prevNode);
-
-    if(header == prevNode)
-      header = nextNode;
-
-    remove(prevNode);
-    addBetween(prevNode.getElement(),prevNode.getFrequency(),holdPrev,holdNext);
+  //adds nextNode to the previous position of prevNode
+  protected void addToPos(Node<E> prevNode , Node<E> nextNode){
     
+    //getting nextNode out of Position
+    nextNode.getPrev().setNext(nextNode.getNext());
+    nextNode.getNext().setPrev(nextNode.getPrev());
+    
+    //putting our node into position
+    prevNode.getPrev().setNext(nextNode);
+    nextNode.setPrev(prevNode.getPrev());
+    prevNode.setPrev(nextNode);
+    nextNode.setNext(prevNode);
+    if (header == prevNode)
+      header = nextNode;
 
   }
 
@@ -238,35 +237,41 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
     Node<E> targetNode = getTargetNode(element);
     targetNode.frequency++;
-    System.out.println(targetNode.getElement()+" element ve freq"+targetNode.frequency);
     correctPos(targetNode);
   
   }
 
   protected void correctPos(Node<E> node){
 
-    Node<E> walk = header;
-	  do {
+    Node<E> walk = node.getPrev(); //insertion sort idea
+    Node<E> hold = null; //lowest lexiographic
+    
+	  while(walk != header.getPrev()){
     
       if(node.getFrequency() > walk.getFrequency()){
-        
-        switchPos(walk,node);
-        return;  
-      
+        hold = walk;
       }
 
       if(node.getFrequency() == walk.getFrequency()){
-      
+
         if(node.getElement().compareTo(walk.getElement()) < 0){
-          switchPos(walk,node);
-          return;  
+          hold = walk; //holding the same freq but lower lexiographic      
         }
     
       }
 
-      walk = walk.getNext();
 
-	  } while (walk != header);
+      //in first comparison it must have a value if it is not biggest
+      if(hold == null) 
+        return;
+
+      walk = walk.getPrev();
+
+      
+    }
+
+    if(hold != null)
+      addToPos(hold,node);
 
   }
 
