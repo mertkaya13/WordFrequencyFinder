@@ -27,7 +27,7 @@ public class word_frequency{
 
         }catch(FileNotFoundException e){
             e.printStackTrace();
-            System.out.println("File NOT FOUND!!");
+            System.out.println("File NOT FOUND!!"+"--"+fileName+"--");
             System.exit(0);
         }
         while(reader.hasNextLine()){
@@ -115,7 +115,8 @@ public class word_frequency{
             break;
     
             case "print-max":
-            //System.out.println(words.printMax(directive[1]));
+            int number = Integer.parseInt(directive[1]);
+            words.printMax(number);
             break;
         }
         
