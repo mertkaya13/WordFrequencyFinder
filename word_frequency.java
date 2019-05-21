@@ -18,7 +18,7 @@ public class word_frequency{
     /*Parses throught the file and sends every line to 
     lineParser
     */
-    private static void fileParser(String fileName){
+    private static void textFileParser(String fileName){
         Scanner reader = null;
         try{
 
@@ -31,14 +31,14 @@ public class word_frequency{
             System.exit(0);
         }
         while(reader.hasNextLine()){
-            lineParser(reader.nextLine());
+            textlineParser(reader.nextLine());
         }
             
     } 
 
 
     //Parses throught the line.Sends words to addToList method of CDLL
-    public static void lineParser(String line){ 
+    public static void textlineParser(String line){ 
         
         //getting rid of chars that are not alphanum.Putting space
         line = line.replaceAll("[^A-Za-z0-9]", " ");
@@ -57,8 +57,9 @@ public class word_frequency{
         String[] wordArray = line.split(" ");
 
         for(String word : wordArray){
+            
             addToList(word);
-            System.out.println(words);
+
         }
         
     }
@@ -79,10 +80,50 @@ public class word_frequency{
     
     }
 
+    private static void readDirectives(File f){
+        Scanner reader = null;
+        try{
+
+            File newFile = f;
+            reader = new Scanner(newFile);
+
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+            System.out.println("File NOT FOUND - directives !!");
+            System.exit(0);
+        }
+        while(reader.hasNextLine()){
+            doDirective(reader.nextLine());
+        }
+            
+    }
+
+    private static void getDirectives(String directiveFileName){
+        File directiveFile = getFile(directiveFileName);
+        readDirectives(directiveFile);
+    }
+
+    private static void doDirective(String directiveName){
+        String[] directive = directiveName.split(" ");
+
+        switch(directive[0])
+        {    
+      
+            case "load":
+            textFileParser(directive[1]);
+            System.out.println(words);
+            break;
+    
+            case "print-max":
+            //System.out.println(words.printMax(directive[1]));
+            break;
+        }
+        
+    }
+
     public static void main(String[] args){
 
-        fileParser("textFile.txt");        
-        System.out.println(words);
+        getDirectives(args[0]);        
     }
 
 

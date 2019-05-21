@@ -313,4 +313,35 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   }
 
 
+  //TODO : printMax
+
+  /*
+  protected String printMax(int number){
+    if(isEmpty())
+    return "";
+  
+    Node<E> walk = header;
+    Node<E> hold = header;
+    //number of different elements
+    int counter = 0; 
+
+    do { //to check the header
+  
+      if(walk.getElement().equals(target)){
+        return walk;
+      }
+  
+        walk = walk.getNext();
+  
+      if(walk == header){
+        return;
+      
+      }
+    }while(counter <= number);
+
+    return null;
+  }
+  */
+
+
 } //End of CDLL class
