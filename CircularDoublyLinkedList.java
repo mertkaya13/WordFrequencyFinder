@@ -1,7 +1,8 @@
-public class CircularDoublyLinkedList<E extends Comparable<E>>{
+public class CircularDoublyLinkedList<E extends Comparable<E>>{ 
 
   private Node<E> header;
-  private static class Node<E> {
+
+  private static class Node<E> { //each node holds prev,next,element and frequency
     private E element;
     private int frequency;
     private Node<E> prev;       
@@ -34,7 +35,7 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   private int size = 0;   // number of elements in the list
 
 
-  public CircularDoublyLinkedList() {
+  public CircularDoublyLinkedList() { //no dummy nodes
     header = null;
   }
   public int size() { return size; }
@@ -51,9 +52,10 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   }
 
   public void addFirst(E e) {  // makes it header
+   
     Node<E> newNode ;
-  
-    if(isEmpty()){
+   
+    if(isEmpty()){ //if cdll is empty,makes it header.
   
       newNode = new Node<E>(e,1,null,null);
       newNode.setNext(newNode);
@@ -64,7 +66,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
       return;
   
     }
-  
+
+    //Adds To the first position.Which is header position.
     newNode = new Node<E>(e,1,header.getPrev(),header);
     header.getPrev().setNext(newNode);
     header.setPrev(newNode);
@@ -75,6 +78,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
   public void addLast(E e) {
     Node<E> newNode;
+
+    //If CDLL is empty makes it header. It is the only node.
     if(isEmpty()){
     
       newNode = new Node<E>(e,1,null,null);
@@ -84,28 +89,38 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
       size++;
       return;
     }
+
+    /* Headers previous is tail node.
+    *Adds to that position
+    */
     newNode = new Node<E>(e,1, header.getPrev(), header);
     header.getPrev().setNext(newNode);
     header.setPrev(newNode);
     size++;
-    // place just before the header
+
+    //checks the position because list might have more than one 1 freq. words.
+    correctPos(newNode);
   }
 
 
   public E removeFirst() {
-    if (isEmpty()) return null;                  // nothing to remove
-    return remove(header);             // first element is beyond header
+
+
+    if (isEmpty()){return null;} // nothing to remove
+    return remove(header);         // first element is beyond header
   }
 
   public E removeLast() {
-    if (isEmpty()) return null;                     // nothing to remove
+    if (isEmpty()) {return null;}    // nothing to remove
     
-    if(size == 1)
+    if(size == 1) //only element is header
       remove(header);
  
-    return remove(header.getPrev());            // last element is before header
+    return remove(header.getPrev()); // last element is before header
   }
 
+
+  //Adds element between pred. and succ.
   private void addBetween(E e,int f, Node<E> predecessor, Node<E> successor) {
   
     // create and link a new node
@@ -122,10 +137,14 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
       size--;
       return node.getElement();
     }
+
+    //Fixing the prev and next Node.
     Node<E> predecessor = node.getPrev();
     Node<E> successor = node.getNext();
     predecessor.setNext(successor);
     successor.setPrev(predecessor);
+
+    //If it was header. Now next Node takes that place.
     if(node == header)
     header = header.getNext();
     size--;
@@ -138,6 +157,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     Node<E> walk = null;
     StringBuilder sb = new StringBuilder("(");
    
+
+    //Sort of a do-while idea
     if(!isEmpty()){
     
       sb.append(header.getElement());
@@ -146,8 +167,9 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 	 
 	    if(size != 1)
         sb.append(", ");
-		
-      walk = header.getNext(); // if empty would throw nullPointerException
+    
+      // if list is empty,will throw nullPointerException
+      walk = header.getNext(); 
     
     }
   
@@ -167,12 +189,15 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     return sb.toString();
   }
 
+  //iterates through list returns the node which has target element
   private Node<E> getTargetNode(E target){
+    if(isEmpty())
+      return null;
     
     Node<E> walk = header;
 
 
-	do {
+	do { //to check the header
     
     if(walk.getElement().equals(target)){
 			return walk;
@@ -184,6 +209,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     return null;
   }
 
+
+  //iterates through list removes the node which has target element
   public E removeTarget(E target){
   
     Node<E> removed = getTargetNode(target);
@@ -194,26 +221,11 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
   }
 
-  protected boolean isThere(String element){
-    if(isEmpty())
-      return false;
-    if(size == 1)
-      return header.getElement().equals(element);
+  //uses getTargetNode to find if list has target element
+  protected boolean isThere(E element){
+    Node<E> target = getTargetNode(element); 
+    return(target != null); 
 
-
-    Node<E> walk = header.getNext();
-  
-    if(header.getElement().equals(element)){
-      return true;
-    }
-
-    while(walk != header){
-      if(walk.getElement().equals(element)){
-        return true;
-      }
-      walk = walk.getNext();
-    }
-    return false;
   }
 
   //adds nextNode to the previous position of prevNode
@@ -233,27 +245,46 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
   }
 
+  /**Adds frequency to given elements node 
+   * Calls correctPos to switch node to correct position
+   */
   protected void addFreq(E element){
 
     Node<E> targetNode = getTargetNode(element);
+    if(targetNode == null){
+      return; //element is not in the list
+    }
     targetNode.frequency++;
     correctPos(targetNode);
   
   }
 
+
+//insertion sort idea moving to prev nodes finding the position than calling switch
   protected void correctPos(Node<E> node){
 
-    Node<E> walk = node.getPrev(); //insertion sort idea
-    Node<E> hold = null; //lowest lexiographic
+    //Header has the biggest val.
+    Node<E> walk = node.getPrev(); 
+
+    //holds the lowest lexiographicly
+    Node<E> hold = null; 
     
 	  while(walk != header.getPrev()){
     
+      //Means : Walk went too much , break for faster result.
+      if(node.getFrequency() < walk.getFrequency()){ 
+        break;
+      }
+
+      //Means : walk might be smaller than node.
       if(node.getFrequency() > walk.getFrequency()){
         hold = walk;
       }
 
+      //Means : Who is bigger lexiographicly.
       if(node.getFrequency() == walk.getFrequency()){
 
+        //Comparing lexiographic order.
         if(node.getElement().compareTo(walk.getElement()) < 0){
           hold = walk; //holding the same freq but lower lexiographic      
         }
@@ -262,17 +293,23 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
 
       //in first comparison it must have a value if it is not biggest
-      if(hold == null) 
+      if(hold == null) {
         return;
+      }
 
+      //Moving the walk.
       walk = walk.getPrev();
 
       
     }
 
-    if(hold != null)
-      addToPos(hold,node);
+    //It will be null if node is already biggest.No need for a switch.
+    if(hold != null) {
 
+      //add node to prev of hold
+      addToPos(hold,node); 
+
+    }
   }
 
 
