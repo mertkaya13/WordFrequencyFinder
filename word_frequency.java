@@ -130,6 +130,11 @@ public class word_frequency{
             number2 = Integer.parseInt(directive[2]);
             words.printRange(number , number2);
             break;
+
+
+            case "print-freq":
+            words.printFreq(directive[1]);
+            break;
         }
         
     }

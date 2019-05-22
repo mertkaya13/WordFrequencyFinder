@@ -229,9 +229,6 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   }
 
   /**
-   * 
-   * @param prevNode
-   * @param nextNode
    * Adds nextNode to the previous position of prevNode
    */
   protected void addToPos(Node<E> prevNode , Node<E> nextNode){
@@ -251,9 +248,7 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   }
 
 
-  /**
-   * 
-   * @param element
+  /** 
    * Adds frequency to given elements node 
    * Calls correctPos to switch node to correct position
    */
@@ -269,8 +264,6 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   }
 
   /**
-   * 
-   * @param node
    * Insertion sort idea moving to prev nodes finding the position than calling switch
    */
 
@@ -327,9 +320,6 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
 
   /**
-   * 
-   * @param num
-   * @return
    * returns the node in given frequency.
    * If it is not in the list returns null
    */
@@ -457,8 +447,6 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
         counter++;
       }
 
-
-
       if(walk == header){ //loops the entire list
         break;  
       }
@@ -466,6 +454,22 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     }
   
   }
+
+
+  //Prints given word and frequency of the word.
+  protected void printFreq(E word){
+
+    //Gets Node that holds 'word'
+    Node<E> target = getTargetNode(word);
+
+    //If word is in list
+    if(target != null) {
+      System.out.println(word+" "+target.getFrequency());
+    }
+
+  }
+
+
   
 
 
