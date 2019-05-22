@@ -2,7 +2,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
   private Node<E> header;
 
-  private static class Node<E> { //each node holds prev,next,element and frequency
+  //each node holds prev,next,element and frequency
+  private static class Node<E> { 
     private E element;
     private int frequency;
     private Node<E> prev;       
@@ -149,7 +150,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     header = header.getNext();
     size--;
     return node.getElement();
-  }
+  
+  }//End of remove
 
 
   public String toString() {
@@ -187,7 +189,9 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     }
     sb.append(")");
     return sb.toString();
-  }
+  
+  }//End of toString
+
 
   //iterates through list returns the node which has target element
   private Node<E> getTargetNode(E target){
@@ -197,17 +201,18 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     Node<E> walk = header;
 
 
-	do { //to check the header
-    
-    if(walk.getElement().equals(target)){
-			return walk;
-		}
-    
-    walk = walk.getNext();
-    
-	}while(walk != header);
-    return null;
-  }
+    do { //to check the header
+      
+      if(walk.getElement().equals(target)){
+        return walk;
+      }
+      
+      walk = walk.getNext();
+      
+    }while(walk != header);
+  
+      return null;
+    }//End of getTargetNode
 
 
   //iterates through list removes the node which has target element
@@ -226,7 +231,7 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     Node<E> target = getTargetNode(element); 
     return(target != null); 
 
-  }
+  }//End of removeTarget
 
   /**
    * Adds nextNode to the previous position of prevNode
@@ -245,7 +250,7 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     if (header == prevNode)
       header = nextNode;
 
-  }
+  }//End of addToPos
 
 
   /** 
@@ -261,7 +266,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     targetNode.frequency++;
     correctPos(targetNode);
   
-  }
+  }//End of addFreq
+
 
   /**
    * Insertion sort idea moving to prev nodes finding the position than calling switch
@@ -316,7 +322,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
       addToPos(hold,node); 
 
     }
-  }
+  }//End of correctPos
+
 
 
   /**
@@ -337,10 +344,10 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
     return null;
 
-  }
+  }//End of getFreqNode
+
 
   //Prints words that are in from times freq - to times freq
-
   protected void printRange(int from , int to){
 
     if(isEmpty())
@@ -385,7 +392,7 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     
     }
 
-  }
+  }//End of printRange
 
   //Prints the frequencys from top 'number' frequency words
   protected void printMax(int number){
@@ -407,7 +414,7 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     */
     printRange(top,top-number+1); 
   
-  }
+  }//End of printMax
  
  
 
@@ -428,8 +435,6 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   
     //Lowest freq. aka tail.
     Node<E> walk = header.getPrev(); 
-
-    int hold = 0;
 
     //number of different elements
     int counter = 0; 
@@ -453,7 +458,7 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
     }
   
-  }
+  }//End of printMin
 
 
   //Prints given word and frequency of the word.
@@ -464,12 +469,94 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
     //If word is in list
     if(target != null) {
-      System.out.println(word+" "+target.getFrequency());
+      System.out.println(target.getFrequency());
     }
 
   }
 
 
+  /** 
+   * Prints the word in nth position in frequency.
+   * number = 1 will print header
+   * */
+  protected void printNth(int number){
+
+    //Starts from the biggest.
+    Node<E> walk = header;
+    int counter = 0;
+
+    if(number == 1){
+      System.out.println(header.getElement()+" "+header.getFrequency());
+      return;
+    }
+
+
+    //Counts frequency
+    while(counter != number){
+      
+      //Is it different.(in terms of frequency)
+      if(walk.getPrev().getFrequency() != walk.getFrequency()){
+        counter++;
+      }
+
+      //Walk = nth in freq
+      if(counter == number){
+        break;
+      }
+
+      //Moves biggest to lowest
+      walk = walk.getNext();
+
+    }
+
+    //Print the nth freq words (if more than one) 
+    int freq = walk.getFrequency();
+    while(walk.getFrequency() == freq){
+      
+      System.out.println(walk.getElement()+" "+walk.getFrequency());
+      walk = walk.getNext();
+
+    }
+
+  }//End of printNth
+
+
+
+  /**
+   * Remove the N lowest frequency words from the list. 
+   * If N is larger than the number of words in the list,
+   * clear the entire list.
+   */
+  protected void truncateList(int number){
+
+        //Lowest freq. aka tail.
+        Node<E> walk = header.getPrev(); 
+
+        //number of different elements
+        int counter = 0; 
+    
+        //to check the header
+         while(counter < number){
+          
+          //Holds previous node to not to lost after remove
+          Node<E> walkHold = walk.getPrev();
+          remove(walk);
+          walk = walkHold;
+
+          //freq =? previous.freq?
+          if(walk.getNext().getFrequency() != walk.getFrequency()){
+            counter++;
+          }
+    
+          if(walk == header){ //loops the entire list
+            break;  
+          }
+    
+        }
+
+        //Prints the list
+        System.out.println(this);
+  }
   
 
 

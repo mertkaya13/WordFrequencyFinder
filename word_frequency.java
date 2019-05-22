@@ -15,6 +15,7 @@ public class word_frequency{
         return file;
     }
 
+
     /*Parses throught the file and sends every line to 
     lineParser
     */
@@ -34,7 +35,7 @@ public class word_frequency{
             textlineParser(reader.nextLine());
         }
             
-    } 
+    } //Ends of textFileParser
 
 
     //Parses throught the line.Sends words to addToList method of CDLL
@@ -62,7 +63,7 @@ public class word_frequency{
 
         }
         
-    }
+    }//Ends of textlineParser
 
 
     /** If list has the element adds Frequency and uses Insertion Sort
@@ -96,12 +97,14 @@ public class word_frequency{
             doDirective(reader.nextLine());
         }
             
-    }
+    }//Ends of readDirectives
+
 
     private static void getDirectives(String directiveFileName){
         File directiveFile = getFile(directiveFileName);
         readDirectives(directiveFile);
     }
+
 
     private static void doDirective(String directiveName){
         String[] directive = directiveName.split(" ");
@@ -109,21 +112,25 @@ public class word_frequency{
         int number2;
         switch(directive[0])
         {    
-      
+     
+            
             case "load":
             textFileParser(directive[1]);
             System.out.println(words);
             break;
-    
+
+            
             case "print-max":
             number = Integer.parseInt(directive[1]);
             words.printMax(number);
             break;
 
+
             case "print-min":
             number = Integer.parseInt(directive[1]);
             words.printMin(number);
             break;
+
 
             case "print-range":
             number = Integer.parseInt(directive[1]);
@@ -133,15 +140,27 @@ public class word_frequency{
 
 
             case "print-freq":
-            words.printFreq(directive[1]);
+            words.printFreq(directive[1].toLowerCase());
+            break;
+
+            case "print-nth":
+            words.printNth(Integer.parseInt(directive[1]));
+            break;
+
+            case "truncate-list":
+            words.truncateList(Integer.parseInt(directive[1]));
             break;
         }
         
-    }
+    }//Ends of doDirectives
 
     public static void main(String[] args){
 
-        getDirectives(args[0]);        
+        if(!args[0].equals("")){
+           getDirectives(args[0]);    
+        }else{
+            System.out.println("ERROR - NO DIRECTIVE FILE GIVEN!");
+        }    
     }
 
 
