@@ -1,5 +1,7 @@
 public class CircularDoublyLinkedList<E extends Comparable<E>>{ 
 
+  //Mert KAYA 22 MAY 2019
+
   private Node<E> header;
 
   //each node holds prev,next,element and frequency
@@ -157,7 +159,7 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   public String toString() {
 
     Node<E> walk = null;
-    StringBuilder sb = new StringBuilder("(");
+    StringBuilder sb = new StringBuilder();
    
 
     //Sort of a do-while idea
@@ -187,7 +189,7 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
       walk = walk.getNext();
 
     }
-    sb.append(")");
+
     return sb.toString();
   
   }//End of toString
@@ -247,6 +249,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     nextNode.setPrev(prevNode.getPrev());
     prevNode.setPrev(nextNode);
     nextNode.setNext(prevNode);
+
+    //Setting header if prev was header
     if (header == prevNode)
       header = nextNode;
 
@@ -350,23 +354,39 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   //Prints words that are in from times freq - to times freq
   protected void printRange(int from , int to){
 
+    int newFrom;
+    int newTo;
+
+    
+    /**
+     * If it is given in wrong order
+     * 2 to 5 = 5 to 2 
+     */
+    if(from < to){
+      newFrom = to;
+      newTo = from;
+    }else{
+      newFrom = from;
+      newTo = to;  
+    }
+
     if(isEmpty())
       System.out.println("This range is empty.");
 
-    if(to < 1){
+    if(newTo < 1){
       System.out.println("This range is empty.");
     }
 
     //Gets the biggest(first) node that holds from times frequency
-    Node<E> walk = getFreqNode(from);
-    int num = from;
+    Node<E> walk = getFreqNode(newFrom);
+    int num = newFrom;
 
 
     //If from times is not there try lowering it by 1.
     while( walk == null){
 
       //If there is no nodes in the range
-      if(num > to){
+      if(num > newTo){
       
         //Search for n-1
         walk = getFreqNode(--num);
@@ -377,20 +397,29 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
       }
 
     }
-
+ //   System.out.println("inside of walk"+walk.getElement());
     //Prints until 'to' freq
-    while(walk.getFrequency() >= to){ 
+    while(walk.getFrequency() >= newTo){ 
 
-      System.out.println(walk.getElement() +" "+walk.getFrequency() );
+      //dont print ',' for the last item.
+      if(!(walk.getNext().getFrequency() < newTo)){
+        System.out.print(walk.getElement() +" "+walk.getFrequency() +", ");
+      }else{
+        System.out.print(walk.getElement() +" "+walk.getFrequency());
+      }
       
+
       //moves to next node
       walk = walk.getNext(); 
 
       //Preventing infinite looping caused by (to == 1)
-      if(walk == header)
+      if(walk == header){
         break;
+      }
     
     }
+
+    System.out.println(); //for newLine
 
   }//End of printRange
 
@@ -427,12 +456,14 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
    * 
    */
     protected void printMin(int number){
-      if(isEmpty())
-      return;
+      
+    if(isEmpty())
+        return;
 
-    if(number > size)
+    if(number > size){
       System.out.println(this);
-  
+      return;
+    }
     //Lowest freq. aka tail.
     Node<E> walk = header.getPrev(); 
 
@@ -442,7 +473,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     //to check the header
      while(counter < number){
       
-      System.out.println(walk.getElement() +" "+walk.getFrequency() );
+      
+      System.out.print(walk.getElement() +" "+walk.getFrequency() );
 
       //Moves backwards.
       walk = walk.getPrev();
@@ -451,12 +483,20 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
       if(walk.getNext().getFrequency() != walk.getFrequency()){
         counter++;
       }
+      
 
-      if(walk == header){ //loops the entire list
+      //To not to put "," after the last element 
+      if(counter < number){
+        System.out.print(", ");
+      }
+
+      //loops the entire list
+      if(walk == header){ 
         break;  
       }
 
     }
+    System.out.println();//For newLine
   
   }//End of printMin
 
@@ -470,6 +510,8 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     //If word is in list
     if(target != null) {
       System.out.println(target.getFrequency());
+    }else{
+      System.out.println(word+": 0");
     }
 
   }
@@ -486,8 +528,14 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     int counter = 0;
 
     if(number == 1){
-      System.out.println(header.getElement()+" "+header.getFrequency());
-      return;
+      do{
+        System.out.print(walk.getElement()+" "+walk.getFrequency());
+
+        if(walk.getFrequency() == walk.getNext().getFrequency()){        
+          System.out.print(", ");
+        }
+
+      }while(walk.getFrequency() == walk.getNext().getFrequency());
     }
 
 
@@ -513,10 +561,17 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     int freq = walk.getFrequency();
     while(walk.getFrequency() == freq){
       
-      System.out.println(walk.getElement()+" "+walk.getFrequency());
+      System.out.print(walk.getElement()+" "+walk.getFrequency());
+
+      if(walk.getFrequency() == walk.getNext().getFrequency()){        
+        System.out.print(", ");
+      }
+
       walk = walk.getNext();
 
     }
+
+    System.out.println();//For newline.
 
   }//End of printNth
 
@@ -536,16 +591,24 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
         int counter = 0; 
     
         //to check the header
-         while(counter < number){
+         while(counter <= number){
           
+
           //Holds previous node to not to lost after remove
           Node<E> walkHold = walk.getPrev();
+
           remove(walk);
           walk = walkHold;
 
           //freq =? previous.freq?
           if(walk.getNext().getFrequency() != walk.getFrequency()){
             counter++;
+          }
+
+          //It would loop in size = 1
+          if(size == 1){
+            remove(header);
+            return;
           }
     
           if(walk == header){ //loops the entire list

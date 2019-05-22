@@ -3,6 +3,8 @@ import java.io.FileReader;
 import java.util.Scanner;
 import java.io.File;
 
+//Mert KAYA 22 MAY 2019
+
 public class word_frequency{
 
     //Holds all the words.
@@ -81,6 +83,11 @@ public class word_frequency{
     
     }
 
+    /**
+     * Reads directives line by line then;
+     * sends them to doDirectives()
+     * 
+     */
     private static void readDirectives(File f){
         Scanner reader = null;
         try{
@@ -106,6 +113,11 @@ public class word_frequency{
     }
 
 
+    /**
+     * Splits directive name 
+     * gets directive and calls corresponding method in CDLL
+     * 
+     */
     private static void doDirective(String directiveName){
         String[] directive = directiveName.split(" ");
         int number;
@@ -113,7 +125,6 @@ public class word_frequency{
         switch(directive[0])
         {    
      
-            
             case "load":
             textFileParser(directive[1]);
             System.out.println(words);
@@ -158,6 +169,8 @@ public class word_frequency{
 
         if(!args[0].equals("")){
            getDirectives(args[0]);    
+
+        //If no directive file exists.
         }else{
             System.out.println("ERROR - NO DIRECTIVE FILE GIVEN!");
         }    
