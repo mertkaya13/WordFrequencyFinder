@@ -228,7 +228,12 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
   }
 
-  //adds nextNode to the previous position of prevNode
+  /**
+   * 
+   * @param prevNode
+   * @param nextNode
+   * Adds nextNode to the previous position of prevNode
+   */
   protected void addToPos(Node<E> prevNode , Node<E> nextNode){
     
     //getting nextNode out of Position
@@ -245,7 +250,11 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
 
   }
 
-  /**Adds frequency to given elements node 
+
+  /**
+   * 
+   * @param element
+   * Adds frequency to given elements node 
    * Calls correctPos to switch node to correct position
    */
   protected void addFreq(E element){
@@ -259,8 +268,12 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   
   }
 
+  /**
+   * 
+   * @param node
+   * Insertion sort idea moving to prev nodes finding the position than calling switch
+   */
 
-//insertion sort idea moving to prev nodes finding the position than calling switch
   protected void correctPos(Node<E> node){
 
     //Header has the biggest val.
@@ -313,9 +326,78 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
   }
 
 
-  //TODO : printMax
+  /**
+   * 
+   * @param num
+   * @return
+   * returns the node in given frequency.
+   * If it is not in the list returns null
+   */
+  private Node<E> getFreqNode(int num){
 
-  
+    Node<E> walk = header;
+    do{
+      if(walk.getFrequency() == num){
+        return walk;
+      }
+      walk = walk.getNext();
+
+    }
+    while(walk != header);
+
+    return null;
+
+  }
+
+  //Prints words that are in from times freq - to times freq
+
+  protected void printRange(int from , int to){
+
+    if(isEmpty())
+      System.out.println("This range is empty.");
+
+    if(to < 1){
+      System.out.println("This range is empty.");
+    }
+
+    //Gets the biggest(first) node that holds from times frequency
+    Node<E> walk = getFreqNode(from);
+    int num = from;
+
+
+    //If from times is not there try lowering it by 1.
+    while( walk == null){
+
+      //If there is no nodes in the range
+      if(num > to){
+      
+        //Search for n-1
+        walk = getFreqNode(--num);
+        
+      }else{
+        System.out.println("This range is empty.");
+        return;
+      }
+
+    }
+
+    //Prints until 'to' freq
+    while(walk.getFrequency() >= to){ 
+
+      System.out.println(walk.getElement() +" "+walk.getFrequency() );
+      
+      //moves to next node
+      walk = walk.getNext(); 
+
+      //Preventing infinite looping caused by (to == 1)
+      if(walk == header)
+        break;
+    
+    }
+
+  }
+
+  //Prints the frequencys from top 'number' frequency words
   protected void printMax(int number){
     if(isEmpty())
       return;
@@ -323,19 +405,55 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
     if(number > size)
       System.out.println(this);
   
-    Node<E> walk = header;
+    //header holds the maximum frequency 
+    int top = header.getFrequency();
+
+    /**
+     * calls printRange.
+     * Prints From top
+     * until top-number+1
+     * +1 means we dont need the one at (top-number)
+     * 
+    */
+    printRange(top,top-number+1); 
+  
+  }
+ 
+ 
+
+  /**
+   * Print the N lowest frequency words and their frequencies in the list, 
+   * one word per line and
+   * sorted lowest to highest. 
+   * If N is larger than the number of words in the list, 
+   * prints the entire list.
+   * 
+   */
+    protected void printMin(int number){
+      if(isEmpty())
+      return;
+
+    if(number > size)
+      System.out.println(this);
+  
+    //Lowest freq. aka tail.
+    Node<E> walk = header.getPrev(); 
+
     int hold = 0;
 
     //number of different elements
     int counter = 0; 
 
-     while(counter < number){//to check the header
+    //to check the header
+     while(counter < number){
       
       System.out.println(walk.getElement() +" "+walk.getFrequency() );
 
+      //Moves backwards.
+      walk = walk.getPrev();
+
       //freq =? previous.freq?
-      walk = walk.getNext();
-      if(walk.getPrev().getFrequency() != walk.getFrequency()){
+      if(walk.getNext().getFrequency() != walk.getFrequency()){
         counter++;
       }
 
@@ -346,7 +464,7 @@ public class CircularDoublyLinkedList<E extends Comparable<E>>{
       }
 
     }
-    
+  
   }
   
 

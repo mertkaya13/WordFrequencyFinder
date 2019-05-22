@@ -105,7 +105,8 @@ public class word_frequency{
 
     private static void doDirective(String directiveName){
         String[] directive = directiveName.split(" ");
-
+        int number;
+        int number2;
         switch(directive[0])
         {    
       
@@ -115,8 +116,19 @@ public class word_frequency{
             break;
     
             case "print-max":
-            int number = Integer.parseInt(directive[1]);
+            number = Integer.parseInt(directive[1]);
             words.printMax(number);
+            break;
+
+            case "print-min":
+            number = Integer.parseInt(directive[1]);
+            words.printMin(number);
+            break;
+
+            case "print-range":
+            number = Integer.parseInt(directive[1]);
+            number2 = Integer.parseInt(directive[2]);
+            words.printRange(number , number2);
             break;
         }
         
