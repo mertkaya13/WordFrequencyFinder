@@ -1,5 +1,6 @@
 # WordFrequencyFinder
-In a given .txt file , returns frequency. Gets various arguments from command line
+-In a given .txt file , returns frequency. Gets various arguments from command line
+
 
 
 Input Files: Thr program will receive input from two different files.
