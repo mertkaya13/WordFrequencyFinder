@@ -19,7 +19,7 @@ Input Files: Thr program will receive input from two different files.
       Parses the words in the file named filename and construct the frequency linked list.
   
   • print-max N:
-      Print the N highest frequency words and their frequencies in the list, one word per line and
+      Prints the N highest frequency words and their frequencies in the list, one word per line and
       sorted highest to lowest. If N is larger than the number of words in the list, prints the entire
       list.
       
