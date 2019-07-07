@@ -122,44 +122,67 @@ public class word_frequency{
         String[] directive = directiveName.split(" ");
         int number;
         int number2;
+
         switch(directive[0])
         {    
      
             case "load":
-            textFileParser(directive[1]);
-            System.out.println(words);
+				System.out.println("--LOAD--");
+	            textFileParser(directive[1]);
+	            System.out.println(words+"\n");
             break;
 
             
             case "print-max":
-            number = Integer.parseInt(directive[1]);
-            words.printMax(number);
+				System.out.println("--PMAX--");
+	            number = Integer.parseInt(directive[1]);
+	            words.printMax(number);
+				System.out.println();
+
             break;
 
 
             case "print-min":
-            number = Integer.parseInt(directive[1]);
-            words.printMin(number);
+				System.out.println("--PMIN--");
+	            number = Integer.parseInt(directive[1]);
+	            words.printMin(number);
+				System.out.println();
+
             break;
 
 
             case "print-range":
-            number = Integer.parseInt(directive[1]);
-            number2 = Integer.parseInt(directive[2]);
-            words.printRange(number , number2);
+				System.out.println("--PRANGE--");
+	            number = Integer.parseInt(directive[1]);
+	            number2 = Integer.parseInt(directive[2]);
+	            words.printRange(number , number2);
+				System.out.println();
             break;
 
 
             case "print-freq":
-            words.printFreq(directive[1].toLowerCase());
+				System.out.println("--PFREQ--");
+	            words.printFreq(directive[1].toLowerCase());
+				System.out.println();
+
             break;
+
 
             case "print-nth":
-            words.printNth(Integer.parseInt(directive[1]));
+
+				System.out.println("--PNTH--");
+	            words.printNth(Integer.parseInt(directive[1]));
+				System.out.println();
+
             break;
 
+
             case "truncate-list":
-            words.truncateList(Integer.parseInt(directive[1]));
+
+				System.out.println("--TRUNCATE--");
+	            words.truncateList(Integer.parseInt(directive[1]));
+				System.out.println();
+
             break;
         }
         
